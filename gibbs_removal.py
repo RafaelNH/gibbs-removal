@@ -203,8 +203,8 @@ def gibbs_removal_2d_weigthing_functions(shape):
     References
     ----------
     .. [1] Kellner E, Dhital B, Kiselev VG, Reisert M. Gibbs-ringing artifact
-    removal based on local subvoxel-shifts. Magn Reson Med. 2015
-    doi: 10.1002/mrm.26054.
+           removal based on local subvoxel-shifts. Magn Reson Med. 2015
+           doi: 10.1002/mrm.26054.
     """
     G0 = np.zeros(shape)
     G1 = np.zeros(shape)
@@ -270,17 +270,17 @@ def gibbs_removal_2d(image, fn=0, nn=3, G0=None, G1=None):
     if np.any(G0) == None or np.any(G1) == None:
         G0, G1 = gibbs_removal_2d_weigthing_functions(image.shape)
 
-    img_c1, tv_c1 =  gibbs_removal_1d(image, a=1, fn=0, nn=3)
-    img_c0, tv_c0 =  gibbs_removal_1d(image, a=0, fn=0, nn=3)
+    img_c1, tv_c1 =  gibbs_removal_1d(image, a=1, fn=fn, nn=nn)
+    img_c0, tv_c0 =  gibbs_removal_1d(image, a=0, fn=fn, nn=nn)
 
     C1 = np.fft.fft2(img_c1)
     C0 = np.fft.fft2(img_c0)
-    imagec = np.fft.ifft2(np.fft.fftshift(C1)*G1 + np.fft.fftshift(C0)*G0)
+    imagec = abs(np.fft.ifft2(np.fft.fftshift(C1)*G1 + np.fft.fftshift(C0)*G0))
 
     # Just to access performance
     T1 = np.fft.fft2(tv_c1)
     T0 = np.fft.fft2(tv_c0)
-    tv = np.fft.ifft2(np.fft.fftshift(T1)*G1 + np.fft.fftshift(T0)*G0)
+    tv = abs(np.fft.ifft2(np.fft.fftshift(T1)*G1 + np.fft.fftshift(T0)*G0))
 
     return imagec, tv
 
@@ -328,20 +328,21 @@ def volume_gibbs_removal(vol, fn=0, nn=3):
        the neigbors to be considered in TV calculation please change parameters
        nn and fn.
     """
-    shap = vol.shape
-    if len(shap) == 4:
+    nd = vol.ndim
+    if nd == 4:
         inishap = vol.shape
         vol = vol.reshape((inishap[0], inishap[1], inishap[2]*inishap[3]))
          
-    G0, G1 = gibbs_removal_2d_weigthing_functions(vol.shape[:2])
+    shap = vol.shape
+    G0, G1 = gibbs_removal_2d_weigthing_functions(shap[:2])
 
-    tv = np.empty(vol.shape)
+    tv = np.empty(shap)
     for i in range(shap[2]):
         imgc, tvi = gibbs_removal_2d(vol[:, :, i], fn=fn, nn=nn, G0=G0, G1=G1)
         vol[:, :, i] = imgc
         tv[:, :, i] = tvi
     
-    if len(shap) == 4:
+    if nd == 4:
         vol = vol.reshape(inishap)
         tv = tv.reshape(inishap)
 
