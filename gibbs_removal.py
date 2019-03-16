@@ -94,7 +94,7 @@ def image_tv(x, fn=0, nn=3, a=0):
 
     PTV = np.absolute(xs[:, (nn+fn):(-nn-fn)] - xs[:, (nn+fn+1):(-nn-fn+1)])
     NTV = np.absolute(xs[:, (nn+fn):(-nn-fn)] - xs[:, (nn+fn-1):(-nn-fn-1)])
-    for n in np.linspace(fn+1, nn-2, num=nn-2):
+    for n in np.linspace(fn+1, nn-2, num=nn-2, dtype=int):
         PTV = PTV + np.absolute(xs[:, (nn+fn+n):(-nn-fn+n)] - \
                                 xs[:, (nn+fn+n+1):(-nn-fn+n+1)])
         NTV = NTV + np.absolute(xs[:, (nn+fn-n):(-nn-fn-n)] - \
