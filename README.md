@@ -1,12 +1,10 @@
 # gibbs-removal
 
-This algorithm suppressed Gibbs artefacts. This algorithm, is an adaption of the algorithm suggested by:
-
-This algorithm, is an adaption of the algorithm suggested by: 
+In this repository, I am sharing an algorithm to suppress Gibbs artefact. This algorithm is an adaption of a procedure suggested by:
 
 [Kellner et al. Gibbs‐ringing artifact removal based on local subvoxel‐shifts (2016). Magn Reson Med 76:1574–1581](https://doi.org/10.1002/mrm.26054)
 
-The full adapted version of algorithm is described in chapter 3 of my phd thesis:
+The full adapted version of algorithm is described in the chapter 3 of my phd thesis:
 
 [Neto Henriques, R. (2018). Advanced Methods for Diffusion MRI Data Analysis and their Application to the Healthy Ageing Brain (Doctoral thesis). https://doi.org/10.17863/CAM.29356](https://www.repository.cam.ac.uk/handle/1810/281993)
 
